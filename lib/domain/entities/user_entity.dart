@@ -1,15 +1,29 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
 class User extends Equatable {
   final String email;
-  final String password;
+  final String id;
+  final String name;
+  // url for photo
+  final String photo;
 
   const User({
-    this.email,
-    this.password,
-  })  : assert(email != null, 'Email cannot be null'),
-        assert(password != null, 'Password cannot be null');
+    @required this.email,
+    @required this.id,
+    @required this.name,
+    @required this.photo,
+  })  : assert(email != null),
+        assert(id != null);
+
+  /// Empty represent unauthenticated user
+  static const empty = User(
+    email: '',
+    id: '',
+    name: null,
+    photo: null,
+  );
 
   @override
-  List<Object> get props => [email, password];
+  List<Object> get props => [email, id, name, photo];
 }

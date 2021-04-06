@@ -23,12 +23,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  cloud_firestore: ^1.0.3
   cupertino_icons: ^1.0.2
   dartz: ^0.9.2
   equatable: ^2.0.0
-  flutter_bloc: ^7.0.0
   firebase_auth: ^1.0.1
-  cloud_firestore: ^1.0.3
+  flutter_bloc: ^7.0.0
+  formz: ^0.3.2
+  pedantic: ^1.11.0
 
 dev_dependencies:
   flutter_test:

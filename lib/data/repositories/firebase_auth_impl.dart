@@ -42,4 +42,10 @@ class FirebaseAuthImpl extends AuthRepository {
     }
     return left(AuthError(AuthErrorType.unknownError));
   }
+
+  @override
+  Future<Either<AuthError, bool>> signOut() {
+    // TODO: implement signOut
+    throw UnimplementedError();
+  }
 }
