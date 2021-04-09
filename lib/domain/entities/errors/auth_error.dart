@@ -10,8 +10,9 @@ class AuthError extends Equatable {
 }
 
 enum AuthErrorType {
+  noAuthError,
   emailAlreadyInUse,
-  unknownError,
-  emailOrPasswordNoMatch,
+  emailOrPasswordNotMatch,
   userDisabled,
+  unknownError,
 }

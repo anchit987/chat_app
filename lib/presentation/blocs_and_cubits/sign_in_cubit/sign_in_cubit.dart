@@ -1,20 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'package:chat_app/domain/entities/errors/auth_error.dart';
+import 'package:chat_app/domain/entities/inputs_models/email.dart';
+import 'package:chat_app/domain/entities/inputs_models/password.dart';
+import 'package:chat_app/domain/repositories/auth_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
-import '../../../domain/entities/inputs_models/confirmed_password.dart';
-import '../../../domain/entities/inputs_models/email.dart';
-import '../../../domain/entities/inputs_models/password.dart';
-import '../../../domain/repositories/auth_repository.dart';
+part 'sign_in_state.dart';
 
-part 'sign_up_state.dart';
-
-class SignUpCubit extends Cubit<SignUpState> {
+class SignInCubit extends Cubit<SignInState> {
   final AuthRepository _authRepository;
-  SignUpCubit(this._authRepository)
+  SignInCubit(this._authRepository)
       : assert(_authRepository != null),
-        super(const SignUpState());
+        super(const SignInState());
 
   void emailChanged(String value) {
     final email = Email.dirty(value);
@@ -24,7 +22,6 @@ class SignUpCubit extends Cubit<SignUpState> {
       status: Formz.validate([
         email,
         state.password,
-        state.confirmedPassword,
       ]),
     ));
   }
@@ -37,33 +34,15 @@ class SignUpCubit extends Cubit<SignUpState> {
       status: Formz.validate([
         state.email,
         password,
-        state.confirmedPassword,
       ]),
     ));
   }
 
-  void confirmedPasswordChanged(String value) {
-    final confirmedPassword = ConfirmedPassword.dirty(
-      password: state.password.value,
-      value: value,
-    );
-
-    emit(state.copyWith(
-      confirmedPassword: confirmedPassword,
-      authError: AuthError(AuthErrorType.noAuthError),
-      status: Formz.validate([
-        state.email,
-        state.password,
-        state.confirmedPassword,
-      ]),
-    ));
-  }
-
-  Future<void> signUpFormSubmitted() async {
+  Future<void> signInFormSubmitted() async {
     if (!state.status.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-    final response = await _authRepository.registerWithEmailAndPassword(
+    final response = await _authRepository.signInWithEmailAndPassword(
       email: state.email.value,
       password: state.password.value,
     );

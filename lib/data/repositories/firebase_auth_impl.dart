@@ -1,12 +1,21 @@
-import 'package:chat_app/domain/entities/errors/auth_error.dart';
-import 'package:chat_app/domain/repositories/auth_repository.dart';
+import 'package:chat_app/domain/entities/user_entity.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
-class FirebaseAuthImpl extends AuthRepository {
-  final FirebaseAuth _firebaseAuth;
+import '../../domain/entities/errors/auth_error.dart';
+import '../../domain/repositories/auth_repository.dart';
+
+class FirebaseAuthImpl implements AuthRepository {
+  final firebase_auth.FirebaseAuth _firebaseAuth;
 
   FirebaseAuthImpl(this._firebaseAuth);
+
+  @override
+  Stream<User> get user {
+    return _firebaseAuth.authStateChanges().map((firebaseUser) {
+      return firebaseUser == null ? User.empty : firebaseUser.toUser;
+    });
+  }
 
   @override
   Future<Either<AuthError, bool>> registerWithEmailAndPassword(
@@ -18,7 +27,7 @@ class FirebaseAuthImpl extends AuthRepository {
       );
       //* ON SUCCESS
       return right(true);
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       if (e.code == "email-already-in-use") {
         return left(AuthError(AuthErrorType.emailAlreadyInUse));
       }
@@ -34,9 +43,9 @@ class FirebaseAuthImpl extends AuthRepository {
         email: email,
         password: password,
       );
-    } on FirebaseAuthException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       if (e.code == "user-not-found" || e.code == "wrong-password") {
-        return left(AuthError(AuthErrorType.emailOrPasswordNoMatch));
+        return left(AuthError(AuthErrorType.emailOrPasswordNotMatch));
       } else if (e.code == "user-disabled")
         return left(AuthError(AuthErrorType.userDisabled));
     }
@@ -47,5 +56,11 @@ class FirebaseAuthImpl extends AuthRepository {
   Future<Either<AuthError, bool>> signOut() {
     // TODO: implement signOut
     throw UnimplementedError();
+  }
+}
+
+extension on firebase_auth.User {
+  User get toUser {
+    return User(id: uid, email: email, name: displayName, photo: photoURL);
   }
 }
