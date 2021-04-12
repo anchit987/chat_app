@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:chat_app/common/constants/route_constants.dart';
 import 'package:chat_app/domain/entities/errors/auth_error.dart';
 import 'package:chat_app/domain/entities/inputs_models/email.dart';
 import 'package:chat_app/domain/entities/inputs_models/password.dart';
 import 'package:chat_app/domain/repositories/auth_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
 
 part 'sign_in_state.dart';
@@ -47,18 +49,18 @@ class SignInCubit extends Cubit<SignInState> {
       password: state.password.value,
     );
 
-    response.fold(
-      (authError) {
-        emit(
-          state.copyWith(
-            status: FormzStatus.submissionFailure,
-            authError: authError,
-          ),
-        );
-      },
-      (success) => state.copyWith(
+    response.fold((authError) {
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionFailure,
+          authError: authError,
+        ),
+      );
+    }, (success) {
+      state.copyWith(
         status: FormzStatus.submissionSuccess,
-      ),
-    );
+      );
+      
+    });
   }
 }

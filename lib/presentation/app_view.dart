@@ -1,5 +1,6 @@
 import 'package:chat_app/common/constants/route_constants.dart';
 import 'package:chat_app/presentation/blocs_and_cubits/auth_bloc/authentication_bloc.dart';
+import 'package:chat_app/presentation/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,21 +16,22 @@ class _AppViewState extends State<AppView> {
       listener: (context, state) {
         switch (state.status) {
           case AuthenticationStatus.authenticated:
-            Navigator.of(context)
-                .pushNamed(RouteList.home, arguments: state.user);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                RouteList.home, (route) => false,
+                arguments: state.user);
             break;
 
           case AuthenticationStatus.unauthenticated:
-            Navigator.of(context).pushNamed(RouteList.signIn);
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil(RouteList.signIn, (route) => false);
             break;
 
-          case AuthenticationStatus.unknown:
-            Navigator.of(context).pushNamed(RouteList.splash);
+          default:
             break;
         }
       },
       child: Scaffold(
-        body: Container(),
+        body: SplashScreen(),
       ),
     );
   }

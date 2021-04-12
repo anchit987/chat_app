@@ -68,18 +68,17 @@ class SignUpCubit extends Cubit<SignUpState> {
       password: state.password.value,
     );
 
-    response.fold(
-      (authError) {
-        emit(
-          state.copyWith(
-            status: FormzStatus.submissionFailure,
-            authError: authError,
-          ),
-        );
-      },
-      (success) => state.copyWith(
+    response.fold((authError) {
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionFailure,
+          authError: authError,
+        ),
+      );
+    }, (success) {
+      state.copyWith(
         status: FormzStatus.submissionSuccess,
-      ),
-    );
+      );
+    });
   }
 }
