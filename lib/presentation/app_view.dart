@@ -1,8 +1,9 @@
-import 'package:chat_app/common/constants/route_constants.dart';
-import 'package:chat_app/presentation/blocs_and_cubits/auth_bloc/authentication_bloc.dart';
-import 'package:chat_app/presentation/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../common/constants/route_constants.dart';
+import 'blocs_and_cubits/auth_bloc/authentication_bloc.dart';
+import 'screens/splash/splash_screen.dart';
 
 class AppView extends StatefulWidget {
   @override
@@ -16,9 +17,8 @@ class _AppViewState extends State<AppView> {
       listener: (context, state) {
         switch (state.status) {
           case AuthenticationStatus.authenticated:
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                RouteList.home, (route) => false,
-                arguments: state.user);
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil(RouteList.home, (route) => false);
             break;
 
           case AuthenticationStatus.unauthenticated:

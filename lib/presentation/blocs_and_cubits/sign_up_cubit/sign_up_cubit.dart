@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:chat_app/domain/entities/errors/auth_error.dart';
+import 'package:chat_app/domain/usecases/auth/sign_up_user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
+import '../../../domain/entities/errors/auth_error.dart';
 import '../../../domain/entities/inputs_models/confirmed_password.dart';
 import '../../../domain/entities/inputs_models/email.dart';
 import '../../../domain/entities/inputs_models/password.dart';
@@ -11,9 +12,9 @@ import '../../../domain/repositories/auth_repository.dart';
 part 'sign_up_state.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
-  final AuthRepository _authRepository;
-  SignUpCubit(this._authRepository)
-      : assert(_authRepository != null),
+  final SignUpUser _signUpUser;
+  SignUpCubit(this._signUpUser)
+      : assert(_signUpUser != null),
         super(const SignUpState());
 
   void emailChanged(String value) {
@@ -31,8 +32,13 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   void passwordChanged(String value) {
     final password = Password.dirty(value);
+    final confirmedPassword = ConfirmedPassword.dirty(
+      password: password.value,
+      value: state.confirmedPassword.value,
+    );
     emit(state.copyWith(
       password: password,
+      confirmedPassword: confirmedPassword,
       authError: AuthError(AuthErrorType.noAuthError),
       status: Formz.validate([
         state.email,
@@ -54,7 +60,7 @@ class SignUpCubit extends Cubit<SignUpState> {
       status: Formz.validate([
         state.email,
         state.password,
-        state.confirmedPassword,
+        confirmedPassword,
       ]),
     ));
   }
@@ -63,11 +69,11 @@ class SignUpCubit extends Cubit<SignUpState> {
     if (!state.status.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-    final response = await _authRepository.registerWithEmailAndPassword(
-      email: state.email.value,
-      password: state.password.value,
-    );
-
+    Map<String, String> map = {
+      "email": state.email.value,
+      "password": state.password.value,
+    };
+    final response = await _signUpUser(map);
     response.fold((authError) {
       emit(
         state.copyWith(
@@ -76,8 +82,10 @@ class SignUpCubit extends Cubit<SignUpState> {
         ),
       );
     }, (success) {
-      state.copyWith(
-        status: FormzStatus.submissionSuccess,
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionSuccess,
+        ),
       );
     });
   }

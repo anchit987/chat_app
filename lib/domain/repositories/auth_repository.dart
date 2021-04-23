@@ -1,8 +1,8 @@
-import 'package:chat_app/domain/entities/user_entity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 
 import '../entities/errors/auth_error.dart';
+import '../entities/user_entity.dart';
 
 abstract class AuthRepository {
   Stream<User> get user;

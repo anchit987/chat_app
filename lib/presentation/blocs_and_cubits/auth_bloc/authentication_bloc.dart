@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:pedantic/pedantic.dart';
 
 import '../../../domain/entities/user_entity.dart';
 import '../../../domain/repositories/auth_repository.dart';
@@ -19,6 +18,8 @@ class AuthenticationBloc
       : assert(authRepository != null),
         _authRepository = authRepository,
         super(const AuthenticationState.unknown()) {
+    //? whenever new user comes it listen and AuthenticationUserChanged
+    //? event called automatically
     _userSubscription = _authRepository.user
         .listen((user) => add(AuthenticationUserChanged(user)));
   }
@@ -37,7 +38,7 @@ class AuthenticationBloc
       yield _mapAuthenticationUserChangedToState(event);
     } else if (event is AuthenticationLogoutRequest) {
       // the background process should not freezed the screen
-      unawaited(_authRepository.signOut());
+      await _authRepository.signOut();
     }
   }
 

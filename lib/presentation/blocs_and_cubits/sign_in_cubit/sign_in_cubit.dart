@@ -1,19 +1,18 @@
 import 'package:bloc/bloc.dart';
-import 'package:chat_app/common/constants/route_constants.dart';
-import 'package:chat_app/domain/entities/errors/auth_error.dart';
-import 'package:chat_app/domain/entities/inputs_models/email.dart';
-import 'package:chat_app/domain/entities/inputs_models/password.dart';
-import 'package:chat_app/domain/repositories/auth_repository.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:formz/formz.dart';
+
+import '../../../domain/entities/errors/auth_error.dart';
+import '../../../domain/entities/inputs_models/email.dart';
+import '../../../domain/entities/inputs_models/password.dart';
+import '../../../domain/usecases/auth/sign_in_user.dart';
 
 part 'sign_in_state.dart';
 
 class SignInCubit extends Cubit<SignInState> {
-  final AuthRepository _authRepository;
-  SignInCubit(this._authRepository)
-      : assert(_authRepository != null),
+  final SignInUser _signInUser;
+  SignInCubit(this._signInUser)
+      : assert(_signInUser != null),
         super(const SignInState());
 
   void emailChanged(String value) {
@@ -44,10 +43,13 @@ class SignInCubit extends Cubit<SignInState> {
     if (!state.status.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-    final response = await _authRepository.signInWithEmailAndPassword(
-      email: state.email.value,
-      password: state.password.value,
-    );
+    Map<String, String> map = {
+      "email": state.email.value,
+      "password": state.password.value,
+    };
+    print(map);
+
+    final response = await _signInUser(map);
 
     response.fold((authError) {
       emit(
@@ -57,10 +59,11 @@ class SignInCubit extends Cubit<SignInState> {
         ),
       );
     }, (success) {
-      state.copyWith(
-        status: FormzStatus.submissionSuccess,
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionSuccess,
+        ),
       );
-      
     });
   }
 }

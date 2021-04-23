@@ -1,22 +1,40 @@
-import 'package:chat_app/common/constants/route_constants.dart';
-import 'package:chat_app/presentation/blocs_and_cubits/sign_in_cubit/sign_in_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
+import '../../../common/constants/route_constants.dart';
+import '../../blocs_and_cubits/auth_bloc/authentication_bloc.dart';
+import '../../blocs_and_cubits/sign_in_cubit/sign_in_cubit.dart';
+
 class SignInForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SignInCubit, SignInState>(
-      listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(content: Text('Authentication Failure')),
-            );
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            switch (state.status) {
+              case AuthenticationStatus.authenticated:
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(RouteList.home, (route) => false);
+                break;
+              default:
+                break;
+            }
+          },
+        ),
+        BlocListener<SignInCubit, SignInState>(
+          listener: (context, state) {
+            if (state.status.isSubmissionFailure) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  const SnackBar(content: Text('Authentication Failure')),
+                );
+            }
+          },
+        )
+      ],
       child: Align(
         alignment: const Alignment(0, -1 / 3),
         child: SingleChildScrollView(

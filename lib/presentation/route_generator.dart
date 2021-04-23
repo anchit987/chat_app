@@ -1,12 +1,12 @@
-import 'dart:ffi';
 
-import 'package:chat_app/common/constants/route_constants.dart';
-import 'package:chat_app/presentation/app_view.dart';
-import 'package:chat_app/presentation/screens/home/home_screen.dart';
-import 'package:chat_app/presentation/screens/sign_in/sign_in_screen.dart';
-import 'package:chat_app/presentation/screens/sign_up/sign_up_screen.dart';
-import 'package:chat_app/presentation/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../common/constants/route_constants.dart';
+import 'app_view.dart';
+import 'screens/home/home_screen.dart';
+import 'screens/sign_in/sign_in_screen.dart';
+import 'screens/sign_up/sign_up_screen.dart';
+import 'screens/splash/splash_screen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -22,7 +22,7 @@ class RouteGenerator {
       case RouteList.signUp:
         return MaterialPageRoute(builder: (_) => SignUpScreen());
       case RouteList.home:
-        return MaterialPageRoute(builder: (_) => HomeScreen(user: args));
+        return MaterialPageRoute(builder: (_) => HomeScreen());
     }
   }
 }

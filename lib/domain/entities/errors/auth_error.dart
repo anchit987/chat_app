@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-class AuthError extends Equatable {
+class AuthError {
   final AuthErrorType authErrorType;
 
   const AuthError(this.authErrorType);

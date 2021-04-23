@@ -1,27 +1,39 @@
-import 'package:chat_app/common/constants/route_constants.dart';
-import 'package:chat_app/presentation/blocs_and_cubits/sign_in_cubit/sign_in_cubit.dart';
-import 'package:chat_app/presentation/blocs_and_cubits/sign_up_cubit/sign_up_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
+import '../../../common/constants/route_constants.dart';
+import '../../blocs_and_cubits/auth_bloc/authentication_bloc.dart';
+import '../../blocs_and_cubits/sign_up_cubit/sign_up_cubit.dart';
+
 class SignUpForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SignUpCubit, SignUpState>(
-      listener: (context, state) {
-        if (state.status.isSubmissionFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(content: Text('Sign Up Failure')),
-            );
-        }
-        else if (state.status.isSubmissionSuccess) {
-          Navigator.of(context)
-          .pushNamedAndRemoveUntil(RouteList.home, (route) => false);
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            switch (state.status) {
+              case AuthenticationStatus.authenticated:
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(RouteList.home, (route) => false);
+                break;
+              default:
+            }
+          },
+        ),
+        BlocListener<SignUpCubit, SignUpState>(
+          listener: (context, state) {
+            if (state.status.isSubmissionFailure) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  const SnackBar(content: Text('Sign Up Failure')),
+                );
+            }
+          },
+        ),
+      ],
       child: Align(
         alignment: const Alignment(0, -1 / 3),
         child: Column(

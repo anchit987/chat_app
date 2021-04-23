@@ -1,8 +1,8 @@
-import 'package:chat_app/domain/entities/user_entity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 import '../../domain/entities/errors/auth_error.dart';
+import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 class FirebaseAuthImpl implements AuthRepository {
@@ -43,6 +43,7 @@ class FirebaseAuthImpl implements AuthRepository {
         email: email,
         password: password,
       );
+      return right(true);
     } on firebase_auth.FirebaseAuthException catch (e) {
       if (e.code == "user-not-found" || e.code == "wrong-password") {
         return left(AuthError(AuthErrorType.emailOrPasswordNotMatch));
@@ -53,9 +54,13 @@ class FirebaseAuthImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<AuthError, bool>> signOut() {
-    // TODO: implement signOut
-    throw UnimplementedError();
+  Future<Either<AuthError, bool>> signOut() async {
+    try {
+      await _firebaseAuth.signOut();
+      return right(true);
+    } catch (e) {
+      return left(AuthError(AuthErrorType.unknownError));
+    }
   }
 }
 

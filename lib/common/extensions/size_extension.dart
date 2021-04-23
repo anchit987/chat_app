@@ -1,4 +1,4 @@
-import 'package:chat_app/common/screen_util/screen_util.dart';
+import '../screen_util/screen_util.dart';
 
 extension SizeExtension on num {
   num get w => ScreenUtil().setWidth(this);

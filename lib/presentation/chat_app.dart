@@ -1,11 +1,11 @@
-import 'package:chat_app/common/constants/route_constants.dart';
-import 'package:chat_app/common/screen_util/screen_util.dart';
-import 'package:chat_app/data/repositories/firebase_auth_impl.dart';
-import 'package:chat_app/di/get_it.dart';
-import 'package:chat_app/presentation/route_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:chat_app/presentation/blocs_and_cubits/auth_bloc/authentication_bloc.dart';
+
+import '../common/constants/route_constants.dart';
+import '../common/screen_util/screen_util.dart';
+import '../di/get_it.dart';
+import 'blocs_and_cubits/auth_bloc/authentication_bloc.dart';
+import 'route_generator.dart';
 
 class ChatApp extends StatefulWidget {
   @override
