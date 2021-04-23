@@ -1,8 +1,8 @@
-import 'package:chat_app/di/get_it.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/constants/route_constants.dart';
+import '../../../di/get_it.dart';
 import '../../blocs_and_cubits/auth_bloc/authentication_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
       listener: (context, state) {
         switch (state.status) {
           case AuthenticationStatus.unauthenticated:
-            print("COMe here kasdjflajf");
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(RouteList.signIn, (route) => false);
             break;
@@ -44,10 +43,11 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text("Chat App"),
           actions: [
             IconButton(
-                icon: Icon(Icons.exit_to_app),
-                onPressed: () {
-                  authenticationBloc.add(AuthenticationLogoutRequest());
-                })
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () {
+                authenticationBloc.add(AuthenticationLogoutRequest());
+              },
+            ),
           ],
         ),
         body: Center(

@@ -1,3 +1,4 @@
+import 'package:chat_app/domain/entities/errors/auth_error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -25,11 +26,20 @@ class SignUpForm extends StatelessWidget {
         BlocListener<SignUpCubit, SignUpState>(
           listener: (context, state) {
             if (state.status.isSubmissionFailure) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(content: Text('Sign Up Failure')),
-                );
+              AuthErrorType authErrorType = state.authError.authErrorType;
+              if (authErrorType == AuthErrorType.emailAlreadyInUse) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    const SnackBar(content: Text('Email is already in use')),
+                  );
+              } else {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    const SnackBar(content: Text('Sign Up Failure')),
+                  );
+              }
             }
           },
         ),

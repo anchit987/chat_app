@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:chat_app/domain/usecases/auth/sign_up_user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
@@ -7,7 +6,7 @@ import '../../../domain/entities/errors/auth_error.dart';
 import '../../../domain/entities/inputs_models/confirmed_password.dart';
 import '../../../domain/entities/inputs_models/email.dart';
 import '../../../domain/entities/inputs_models/password.dart';
-import '../../../domain/repositories/auth_repository.dart';
+import '../../../domain/usecases/auth/sign_up_user.dart';
 
 part 'sign_up_state.dart';
 
