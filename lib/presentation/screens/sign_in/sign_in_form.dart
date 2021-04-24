@@ -1,9 +1,9 @@
-import 'package:chat_app/domain/entities/errors/auth_error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 import '../../../common/constants/route_constants.dart';
+import '../../../domain/entities/errors/auth_error.dart';
 import '../../blocs_and_cubits/auth_bloc/authentication_bloc.dart';
 import '../../blocs_and_cubits/sign_in_cubit/sign_in_cubit.dart';
 
