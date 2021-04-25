@@ -1,3 +1,4 @@
+import 'package:chat_app/data/data_sources/firestore_data_sources.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
@@ -16,7 +17,11 @@ Future intit() async {
       .registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
 
   getItInstance.registerLazySingleton<AuthRepository>(
-      () => FirebaseAuthImpl(getItInstance()));
+      () => FirebaseAuthImpl(getItInstance(), getItInstance()));
+
+  //? DATASOURCES
+  getItInstance.registerLazySingleton<FirestoreDataSources>(
+      () => FirestoreDataSourcesImpl());
 
   //? USECASES
   getItInstance

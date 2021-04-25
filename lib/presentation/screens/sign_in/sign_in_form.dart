@@ -16,6 +16,8 @@ class SignInForm extends StatelessWidget {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
+                //? passing uid to homescreen
+                //? homescreen will call firestore and take all information
                 Navigator.of(context)
                     .pushNamedAndRemoveUntil(RouteList.home, (route) => false);
                 break;

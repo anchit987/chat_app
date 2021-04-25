@@ -47,7 +47,6 @@ class SignInCubit extends Cubit<SignInState> {
       "email": state.email.value,
       "password": state.password.value,
     };
-    print(map);
 
     final response = await _signInUser(map);
 

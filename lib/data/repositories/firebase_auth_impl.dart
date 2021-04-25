@@ -1,19 +1,24 @@
+import 'package:chat_app/domain/entities/inputs_models/email.dart';
+import 'package:chat_app/domain/entities/user_uid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 import '../../domain/entities/errors/auth_error.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
+import '../data_sources/firestore_data_sources.dart';
 
 class FirebaseAuthImpl implements AuthRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
+  final FirestoreDataSources _firestoreDataSources;
 
-  FirebaseAuthImpl(this._firebaseAuth);
+  FirebaseAuthImpl(this._firebaseAuth, this._firestoreDataSources);
 
   @override
-  Stream<User> get user {
+  Stream<UserUid> get uid {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      return firebaseUser == null ? User.empty : firebaseUser.toUser;
+      return firebaseUser == null ? UserUid.empty : firebaseUser.toUser;
     });
   }
 
@@ -21,10 +26,13 @@ class FirebaseAuthImpl implements AuthRepository {
   Future<Either<AuthError, bool>> registerWithEmailAndPassword(
       {String email, String password}) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      //* On sign up new user will be added to the firestore
+      _firestoreDataSources.addUserToFirestore(userCredential);
+
       //* ON SUCCESS
       return right(true);
     } on firebase_auth.FirebaseAuthException catch (e) {
@@ -65,7 +73,7 @@ class FirebaseAuthImpl implements AuthRepository {
 }
 
 extension on firebase_auth.User {
-  User get toUser {
-    return User(id: uid, email: email, name: displayName, photo: photoURL);
+  UserUid get toUser {
+    return UserUid(uid: uid);
   }
 }
