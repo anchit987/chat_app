@@ -1,6 +1,5 @@
-import 'package:chat_app/domain/entities/chat_rooms_entities/chat_room_card_list_entity.dart';
-import 'package:chat_app/domain/entities/user_entity.dart';
+import '../entities/chat_rooms_entities/user_chat_rooms.dart';
 
 abstract class ChatRoomCardListRepository {
-  Future<ChatRoomCardList> getAllChatRoomCards(User user);
+  Stream<UserChatRooms> get userChatRooms;
 }

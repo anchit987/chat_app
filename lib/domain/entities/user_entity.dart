@@ -10,7 +10,7 @@ class User extends Equatable {
   final List<String> friends;
   final List<String> friendRequests;
   final List<String> pendingRequests;
-  final List<String> chatRoomids;
+  final String userChatRoomsid;
 
   const User({
     @required this.email,
@@ -21,7 +21,7 @@ class User extends Equatable {
     @required this.friends,
     @required this.friendRequests,
     @required this.pendingRequests,
-    @required this.chatRoomids,
+    @required this.userChatRoomsid,
   })  : assert(email != null),
         assert(uid != null);
 
@@ -35,6 +35,6 @@ class User extends Equatable {
         friends,
         friendRequests,
         pendingRequests,
-        chatRoomids
+        userChatRoomsid
       ];
 }

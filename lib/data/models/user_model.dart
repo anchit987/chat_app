@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 
-import 'package:chat_app/domain/entities/user_entity.dart';
+import '../../domain/entities/user_entity.dart';
 
 class UserModel extends User {
   final String uid;
@@ -13,7 +13,7 @@ class UserModel extends User {
   final List<String> friends;
   final List<String> friendRequests;
   final List<String> pendingRequests;
-  final List<String> chatRoomids;
+  final String userChatRoomsid;
 
   UserModel({
     @required this.uid,
@@ -24,7 +24,7 @@ class UserModel extends User {
     @required this.friends,
     @required this.friendRequests,
     @required this.pendingRequests,
-    @required this.chatRoomids,
+    @required this.userChatRoomsid,
   }) : super(
           uid: uid,
           email: email,
@@ -34,7 +34,7 @@ class UserModel extends User {
           friends: friends,
           friendRequests: friendRequests,
           pendingRequests: pendingRequests,
-          chatRoomids: chatRoomids,
+          userChatRoomsid: userChatRoomsid,
         );
 
   Map<String, dynamic> toMap() {
@@ -47,7 +47,7 @@ class UserModel extends User {
       'friends': friends,
       'friendRequests': friendRequests,
       'pendingRequests': pendingRequests,
-      'chatRoomids': chatRoomids,
+      'userChatRoomsid': userChatRoomsid,
     };
   }
 
@@ -61,12 +61,7 @@ class UserModel extends User {
       friends: List<String>.from(map['friends']) ?? [],
       friendRequests: List<String>.from(map['friendRequests']) ?? [],
       pendingRequests: List<String>.from(map['pendingRequests']) ?? [],
-      chatRoomids: List<String>.from(map['chatRoomids']) ?? [],
+      userChatRoomsid: map['userChatRoomsid'],
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source));
 }

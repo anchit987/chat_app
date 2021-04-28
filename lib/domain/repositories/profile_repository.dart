@@ -1,6 +1,7 @@
-import 'package:chat_app/domain/entities/errors/app_error.dart';
-import 'package:chat_app/domain/entities/user_entity.dart';
 import 'package:dartz/dartz.dart';
+
+import '../entities/errors/app_error.dart';
+import '../entities/user_entity.dart';
 
 abstract class ProfileRepository {
   Future<Either<AppError, Unit>> changeUsername(String newUsername);

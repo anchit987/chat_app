@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:chat_app/domain/entities/user_uid.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../domain/entities/user_uid.dart';
 import '../../../domain/repositories/auth_repository.dart';
 
 part 'authentication_event.dart';

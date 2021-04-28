@@ -12,7 +12,6 @@ import '../data_sources/firestore_data_sources.dart';
 class FirebaseAuthImpl implements AuthRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirestoreDataSources _firestoreDataSources;
-
   FirebaseAuthImpl(this._firebaseAuth, this._firestoreDataSources);
 
   @override
@@ -26,12 +25,12 @@ class FirebaseAuthImpl implements AuthRepository {
   Future<Either<AuthError, bool>> registerWithEmailAndPassword(
       {String email, String password}) async {
     try {
-      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+      await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
       //* On sign up new user will be added to the firestore
-      _firestoreDataSources.addUserToFirestore(userCredential);
+      _firestoreDataSources.addUserToFirestore();
 
       //* ON SUCCESS
       return right(true);
