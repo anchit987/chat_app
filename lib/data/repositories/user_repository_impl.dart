@@ -12,8 +12,8 @@ class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl(this._firestore, this._firebaseAuth);
 
   @override
-  Stream<myUser.User> get user {
-    return _firestore
+  Stream<myUser.User> get user async* {
+    yield* _firestore
         .collection("users")
         .doc(_firebaseAuth.currentUser.uid)
         .snapshots()
