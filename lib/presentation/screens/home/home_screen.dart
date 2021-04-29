@@ -1,3 +1,4 @@
+import 'package:chat_app/presentation/blocs_and_cubits/search/search_bloc.dart';
 import 'package:chat_app/presentation/blocs_and_cubits/user_chat_rooms/user_chat_rooms_bloc.dart';
 import 'package:chat_app/presentation/screens/home/chat_rooms_list.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   AuthenticationBloc authenticationBloc;
   UserChatRoomsBloc userChatRoomsBloc;
+  
 
   @override
   void initState() {
@@ -55,6 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(Icons.exit_to_app),
                 onPressed: () {
                   authenticationBloc.add(AuthenticationLogoutRequest());
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(RouteList.search);
                 },
               ),
             ],

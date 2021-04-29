@@ -12,7 +12,6 @@ class ChatRoomCardListRepositoryImpl implements ChatRoomCardListRepository {
 
   @override
   Stream<UserChatRoomsModel> get userChatRooms async* {
-    print("MY LOG" + _firebaseauth.currentUser.uid);
     yield* _firestore
         .collection("user-chat-rooms")
         .doc(_firebaseauth.currentUser.uid)

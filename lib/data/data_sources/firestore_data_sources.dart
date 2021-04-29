@@ -61,11 +61,13 @@ class FirestoreDataSourcesImpl implements FirestoreDataSources {
         .collection("search")
         .doc("all-users")
         .update({
-      uid: {
-        "username": _firebaseAuth.currentUser.email,
-        "status": "Hey there! I am using ChatApp",
-        "photo": "",
-      }
+      "all-users": FieldValue.arrayUnion([
+        {
+          "username": _firebaseAuth.currentUser.email,
+          "status": "Hey there! I am using ChatApp",
+          "photo": "",
+        }
+      ])
     });
   }
 }

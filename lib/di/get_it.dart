@@ -1,3 +1,8 @@
+import 'package:chat_app/data/repositories/search_repository_impl.dart';
+import 'package:chat_app/data/repositories/user_repository_impl.dart';
+import 'package:chat_app/domain/repositories/search_repository.dart';
+import 'package:chat_app/domain/repositories/user_repository.dart';
+import 'package:chat_app/presentation/blocs_and_cubits/search/search_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -27,6 +32,10 @@ Future intit() async {
       () => FirebaseAuthImpl(getItInstance(), getItInstance()));
   getItInstance.registerLazySingleton<ChatRoomCardListRepository>(
       () => ChatRoomCardListRepositoryImpl(getItInstance(), getItInstance()));
+  getItInstance.registerLazySingleton<UserRepository>(
+      () => UserRepositoryImpl(getItInstance(), getItInstance()));
+  getItInstance.registerLazySingleton<SearchRepository>(
+      () => SearchRepositoryImpl(getItInstance(), getItInstance()));
 
   //? DATASOURCES
   getItInstance.registerLazySingleton<FirestoreDataSources>(
@@ -48,4 +57,6 @@ Future intit() async {
 
   getItInstance.registerFactory<UserChatRoomsBloc>(
       () => UserChatRoomsBloc(getItInstance()));
+
+  getItInstance.registerFactory<SearchBloc>(() => SearchBloc(getItInstance()));
 }

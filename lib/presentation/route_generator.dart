@@ -1,4 +1,6 @@
+import 'dart:ffi';
 
+import 'package:chat_app/presentation/screens/search/search_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../common/constants/route_constants.dart';
@@ -23,6 +25,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => SignUpScreen());
       case RouteList.home:
         return MaterialPageRoute(builder: (_) => HomeScreen());
+      case RouteList.search:
+        return MaterialPageRoute(builder: (_) => SearchScreen());
     }
   }
 }
